@@ -1,0 +1,28 @@
+.hero {
+  width: 80%;
+}
+
+.hero > .title {
+  margin: 1rem 0;
+  font-size: 3rem;
+  font-weight: lighter;
+}
+
+.hero > .description {
+  font-size: 1.5rem;
+  font-weight: lighter;
+}
+
+.hero .actions {
+  margin: 1rem 0;
+}
+
+@media (max-width: 500px) {
+  .hero .title {
+    font-size: 2.5rem;
+  }
+
+  .hero .description {
+    font-size: 1.2rem;
+  }
+}

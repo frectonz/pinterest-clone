@@ -1,0 +1,118 @@
+body > section {
+  width: 100vw;
+  height: 100vh;
+}
+
+#headline-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.background {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url(../images/background.png);
+}
+
+.form-title {
+  padding: 10px;
+  font-size: 3rem;
+  color: #ffffff;
+}
+
+.background .form {
+  padding: 2rem 4rem;
+  margin: 1rem;
+  text-align: center;
+  border-radius: 20px;
+  background-color: #ffffff;
+}
+
+@media (max-width: 500px) {
+  .form-title {
+    display: none;
+  }
+  .background .form {
+    padding: 1rem 1.5rem;
+  }
+}
+
+.background .form > img {
+  width: 50px;
+}
+
+fieldset {
+  margin: 1rem auto;
+  border: 2px solid var(--color-secondary);
+}
+
+fieldset input {
+  padding: 10px 5px;
+  border: none;
+  width: 100%;
+}
+
+.form-header {
+  margin: 1rem auto;
+}
+
+.form > .or {
+  margin: 1rem auto;
+}
+
+.social-buttons {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem auto;
+}
+
+.social-button {
+  gap: 10px;
+  display: flex;
+  padding: 10px 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-button:hover {
+  text-decoration: none;
+}
+
+#facebook {
+  color: #ffffff;
+  background-color: #3b5998;
+}
+
+#facebook:hover {
+  background-color: #2d4373;
+}
+
+#facebook > svg {
+  fill: #ffffff;
+}
+
+#google {
+  color: #ffffff;
+  background-color: #dd4b39;
+}
+
+#google:hover {
+  background-color: #c23321;
+}
+
+#google > svg {
+  fill: #ffffff;
+}
+
+.legal-notice {
+  font-size: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.legal-notice span {
+  color: var(--color-primary);
+}

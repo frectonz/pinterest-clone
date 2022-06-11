@@ -1,0 +1,28 @@
+:root {
+  --color-primary: #e60023;
+  --color-primary-darken: #ad081b;
+
+  --color-secondary: #efefef;
+  --color-secondary-darken: #e2e2e2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+img {
+  width: 100%;
+}
+
+a {
+  color: black;
+  font-weight: lighter;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

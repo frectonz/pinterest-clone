@@ -1,0 +1,31 @@
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  background: none;
+  border-radius: 50%;
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.fab svg {
+  fill: var(--color-primary);
+}
+
+.fab:hover {
+  background-color: var(--color-secondary-darken);
+}
+
+@media (max-width: 768px) {
+  .fab {
+    left: 20px;
+    right: unset;
+  }
+}

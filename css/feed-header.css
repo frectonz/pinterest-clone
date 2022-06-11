@@ -1,0 +1,60 @@
+header {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+header > * {
+  font-size: 1.1rem;
+}
+
+.logo > svg {
+  fill: var(--color-primary);
+}
+
+.menu {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: white;
+  background-color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.menu > svg {
+  fill: white;
+}
+
+.search {
+  flex: 1;
+}
+
+.search > input {
+  width: 100%;
+  border: none;
+  padding: 1rem;
+  border-radius: 20px;
+  background-color: var(--color-secondary);
+}
+
+.avatar {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  border: none;
+  background: none;
+}
+
+.avatar img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}

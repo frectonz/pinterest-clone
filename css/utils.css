@@ -1,0 +1,48 @@
+.bg-yellow {
+  background-color: rgb(255, 253, 146);
+}
+
+.bg-blue {
+  background-color: #dafff6;
+}
+
+.bg-pink {
+  background-color: rgb(255, 226, 235);
+}
+
+.blue-text {
+  color: #006b6c;
+}
+
+.red-text {
+  color: rgb(195, 25, 82);
+}
+
+.yellow-text {
+  color: rgb(255, 253, 146);
+}
+
+.pink-text {
+  color: rgb(210, 91, 58);
+}
+
+.girl {
+  background-image: url(../images/side-image.png);
+}
+
+.dinner {
+  background-size: cover;
+  background-image: url(../images/dinner.png);
+}
+
+.side-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 1000px) {
+  .girl {
+    background-position: top;
+  }
+}

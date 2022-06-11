@@ -1,0 +1,27 @@
+.two-column {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1000px) {
+  .two-column {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .background > .two-column > .column:nth-child(1) {
+    display: none;
+  }
+
+  .background > .two-column > .column:nth-child(2) {
+    margin: 1rem;
+  }
+}

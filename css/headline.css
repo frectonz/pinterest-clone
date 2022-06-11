@@ -1,0 +1,46 @@
+.headline {
+  display: flex;
+  padding: 10px;
+  font-size: 3rem;
+  margin: 10rem auto;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.headline .title {
+  font-weight: lighter;
+}
+
+.headline .subtitle {
+  font-weight: lighter;
+  color: var(--color-primary);
+}
+
+.slider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100px;
+  margin: 1rem auto;
+}
+
+.slider > div {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e1e1e1;
+}
+
+@media (max-width: 500px) {
+  .headline {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .headline {
+    font-size: 1rem;
+  }
+}

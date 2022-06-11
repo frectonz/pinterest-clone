@@ -1,0 +1,34 @@
+.btn {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: white;
+  background-color: var(--color-primary);
+}
+
+.btn-secondary {
+  color: black;
+  background-color: var(--color-secondary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-darken);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary-darken);
+}
+
+.btn-blue {
+  color: white;
+  background-color: #006b6c;
+}
+
+.btn-blue:hover {
+  background-color: #00595a;
+}
