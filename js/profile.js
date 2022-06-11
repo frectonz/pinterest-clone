@@ -6,8 +6,10 @@ window.addEventListener("load", () => {
   setupSearchBar();
   setupHeaderMenus();
 
-  const pinMenus = document.querySelectorAll(".pin-menu");
-  const pinMenuDropdowns = document.querySelectorAll(".pin-menu-dropdown");
+  const profileOptionsMenuInvoker = document.querySelector(
+    "#profileOptionsMenuInvoker"
+  );
+  const profileOptionsMenu = document.querySelector("#profileOptionsMenu");
 
-  pinMenus.forEach((pinMenu, i) => makeDropdown(pinMenu, pinMenuDropdowns[i]));
+  makeDropdown(profileOptionsMenuInvoker, profileOptionsMenu);
 });

@@ -1,6 +1,6 @@
 import PanelSnap from "https://cdn.skypack.dev/panelsnap";
 
-const instance = new PanelSnap();
+new PanelSnap();
 const subtitle = document.querySelector(".subtitle");
 const slideBtns = document.querySelectorAll(".slider > div");
 

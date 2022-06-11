@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="./css/ping-grid.css" />
     <link rel="stylesheet" href="./css/feed-header.css" />
 
-    <title>Pinterest Clone</title>
+    <title>Home Feed</title>
   </head>
   <body>
     <header>
@@ -34,7 +34,7 @@
       </a>
 
       <div class="dropdown" id="pageDropdown">
-        <button class="menu">
+        <button class="menu" id="menuBtn">
           <span>Home</span>
           <svg width="12" height="12" viewBox="0 0 24 24">
             <path
@@ -53,7 +53,7 @@
       </div>
 
       <div class="dropdown" id="profileDropdown">
-        <button class="avatar">
+        <button class="avatar" id="avatarBtn">
           <img src="./images/avatar.jpeg" alt="avatar" />
           <svg width="12" height="12" viewBox="0 0 24 24">
             <path
@@ -225,6 +225,6 @@
       </svg>
     </button>
 
-    <script src="./js/feed.js"></script>
+    <script type="module" src="./js/feed.js"></script>
   </body>
 </html>

@@ -64,7 +64,7 @@ header svg {
   }
 
   header .logo {
-    gap: 0.1;
+    gap: 0.1rem;
     justify-content: flex-start;
   }
 }

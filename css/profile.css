@@ -1,0 +1,35 @@
+.profile .avatar {
+  width: 100px;
+  height: 100px;
+  background-image: url(../images/avatar.jpeg);
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.profile {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile > .bio {
+  font-weight: bold;
+}
+
+.profile > .stats {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.profile > .stats > .stat {
+  font-weight: bold;
+}
+
+.profile > .actions {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
