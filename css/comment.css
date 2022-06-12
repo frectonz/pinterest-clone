@@ -1,0 +1,22 @@
+.comment {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 10px;
+  margin: 1rem 0;
+}
+
+.comment > img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.comment .username {
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.comment .username:hover {
+  text-decoration: underline;
+}
