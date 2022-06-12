@@ -12,4 +12,9 @@ window.addEventListener("load", () => {
   const profileOptionsMenu = document.querySelector("#profileOptionsMenu");
 
   makeDropdown(profileOptionsMenuInvoker, profileOptionsMenu);
+
+  const pinMenus = document.querySelectorAll(".pin-menu");
+  const pinMenuDropdowns = document.querySelectorAll(".pin-menu-dropdown");
+
+  pinMenus.forEach((pinMenu, i) => makeDropdown(pinMenu, pinMenuDropdowns[i]));
 });
