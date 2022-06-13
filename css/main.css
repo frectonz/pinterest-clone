@@ -3,6 +3,10 @@ body > section {
   height: 100vh;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 #headline-section {
   display: flex;
   flex-direction: column;
