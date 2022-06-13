@@ -1,13 +1,11 @@
-import makeDropdown from "./utils/dropdown.js";
 import setupSearchBar from "./utils/searchBar.js";
 import setupHeaderMenus from "./utils/headerMenus.js";
+import setupPinGrid from "./utils/pinGrid.js";
+import setupPinMenus from "./utils/pinMenus.js";
 
 window.addEventListener("load", () => {
   setupSearchBar();
   setupHeaderMenus();
-
-  const pinMenus = document.querySelectorAll(".pin-menu");
-  const pinMenuDropdowns = document.querySelectorAll(".pin-menu-dropdown");
-
-  pinMenus.forEach((pinMenu, i) => makeDropdown(pinMenu, pinMenuDropdowns[i]));
+  setupPinGrid();
+  setupPinMenus();
 });

@@ -6,6 +6,10 @@
   cursor: pointer;
 }
 
+.btn:hover {
+  text-decoration: none;
+}
+
 .btn-primary {
   color: white;
   background-color: var(--color-primary);
