@@ -6,6 +6,11 @@
   --color-secondary-darken: #e2e2e2;
 }
 
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/montserrat.ttf");
+}
+
 * {
   margin: 0;
   padding: 0;
