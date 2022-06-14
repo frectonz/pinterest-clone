@@ -1,5 +1,3 @@
-import PanelSnap from "https://cdn.skypack.dev/panelsnap";
-
 const colors = ["#c28b00", "#618c7b", "#0076d3", "#407a57"];
 const labels = [
   "weeknight dinner idea",
@@ -10,8 +8,6 @@ const labels = [
 let i = 0;
 
 window.addEventListener("load", () => {
-  new PanelSnap();
-
   const subtitle = document.querySelector(".subtitle");
   const slideBtns = document.querySelectorAll(".slider > div");
 
