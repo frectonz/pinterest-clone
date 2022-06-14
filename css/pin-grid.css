@@ -18,6 +18,10 @@
   cursor: pointer;
 }
 
+.pin-menu {
+  z-index: 50;
+}
+
 .pin-menu-dropdown {
   width: 180px;
   left: -100px;

@@ -31,6 +31,17 @@ export default function setupPinGrid() {
     "./images/fern.jpg",
     "./images/scandinavian.jpg",
     "./images/side-image.png",
+    "./images/beach.jpg",
+    "./images/cake.jpg",
+    "./images/mom-and-baby.jpg",
+    "./images/night.jpg",
+    "./images/building.jpg",
+    "./images/dog.jpg",
+    "./images/desert-night.jpg",
+    "./images/rocks.jpg",
+    "./images/cookies.jpg",
+    "./images/flower.jpg",
+    "./images/galaxy.jpg",
   ];
 
   const imagePins = images.map((image) => {

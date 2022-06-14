@@ -20,3 +20,9 @@
 .comment .username:hover {
   text-decoration: underline;
 }
+
+.comment > div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

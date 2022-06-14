@@ -1,7 +1,9 @@
 export default function makeDropdown(invokerBtn, dropdown) {
   let dropdownOpen = false;
 
-  invokerBtn.addEventListener("click", () => {
+  invokerBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
     if (dropdownOpen) {
       dropdownOpen = false;
       dropdown.style.display = "none";
