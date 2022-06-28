@@ -5,6 +5,7 @@
   display: grid;
   padding: 1rem;
   grid-template-columns: repeat(7, 1fr);
+  z-index: -1;
 }
 
 .gallery::after {
