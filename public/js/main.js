@@ -154,6 +154,7 @@ const logIn = (email, password) => {
 const handleSuccess = (userCredential) => {
   console.log(userCredential);
   submitButton.textContent = "Submitted 🎉";
+  window.location.href = "/feed.html";
 };
 
 const handleError = (error) => {
@@ -170,3 +171,12 @@ const handleError = (error) => {
   formError.style.display = "block";
   submitButton.textContent = "Continue";
 };
+
+const auth = getAuth();
+const user = auth.currentUser;
+
+if (user) {
+  console.log(user);
+} else {
+  console.log("no user");
+}

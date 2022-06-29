@@ -1,3 +1,8 @@
+import {
+  getAuth,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
+
 import setupSearchBar from "./utils/searchBar.js";
 import setupHeaderMenus from "./utils/headerMenus.js";
 import setupPinGrid from "./utils/pinGrid.js";
@@ -28,19 +33,34 @@ const tags = [
   "sunrise",
 ];
 
-window.addEventListener("load", () => {
-  setupSearchBar();
-  setupHeaderMenus();
-  setupPinGrid();
-  setupPinMenus();
+setupSearchBar();
+setupHeaderMenus();
+setupPinGrid();
+setupPinMenus();
 
-  const chips = document.querySelector("#chips");
+const chips = document.querySelector("#chips");
 
-  const chipButtons = tags.map((tag) => {
-    const button = document.createElement("button");
-    button.innerText = tag;
-    return button;
-  });
+const chipButtons = tags.map((tag) => {
+  const button = document.createElement("button");
+  button.innerText = tag;
+  return button;
+});
 
-  chips.append(...chipButtons);
+chips.append(...chipButtons);
+
+const auth = getAuth();
+
+const user = auth.currentUser;
+if (user) {
+  console.log("user", user);
+} else {
+  console.log("no user");
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("USER", user);
+  } else {
+    console.log("NO USER");
+  }
 });
