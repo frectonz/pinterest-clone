@@ -1,4 +1,7 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
 
 const colors = ["#c28b00", "#618c7b", "#0076d3", "#407a57"];
 const labels = [
