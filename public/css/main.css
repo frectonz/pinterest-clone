@@ -115,19 +115,6 @@ fieldset input {
   text-decoration: none;
 }
 
-#facebook {
-  color: #ffffff;
-  background-color: #3b5998;
-}
-
-#facebook:hover {
-  background-color: #2d4373;
-}
-
-#facebook > svg {
-  fill: #ffffff;
-}
-
 #google {
   color: #ffffff;
   background-color: #dd4b39;
