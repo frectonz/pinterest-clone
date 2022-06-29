@@ -191,12 +191,29 @@
             <p>Find new ideas to try</p>
           </div>
 
+          <div class="form-errors" id="form-error">
+            <p>Something went wrong!</p>
+            <p>Please try again!</p>
+          </div>
+
           <fieldset>
-            <input type="text" id="username" placeholder="Username" required />
+            <input
+              type="text"
+              id="username"
+              placeholder="Username"
+              autocomplete="username"
+              required
+            />
           </fieldset>
 
           <fieldset>
-            <input type="email" id="email" placeholder="Email" required />
+            <input
+              type="email"
+              id="email"
+              placeholder="Email"
+              autocomplete="email"
+              required
+            />
           </fieldset>
 
           <fieldset>
@@ -204,6 +221,7 @@
               id="password"
               type="password"
               placeholder="Create a password"
+              autocomplete="current-password"
               required
             />
           </fieldset>

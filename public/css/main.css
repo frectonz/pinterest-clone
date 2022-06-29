@@ -39,7 +39,7 @@ html {
   background-color: #ffffff;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 1000px) {
   .form-title {
     display: none;
   }
@@ -73,6 +73,14 @@ fieldset input {
 
 .form > .or {
   margin: 1rem auto;
+}
+
+.form > .form-errors {
+  padding: 1rem;
+  border-radius: 10px;
+  color: white;
+  background-color: var(--color-primary);
+  display: none;
 }
 
 .social-buttons {

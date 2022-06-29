@@ -73,6 +73,7 @@ window.addEventListener("load", () => {
     const email = loginForm.querySelector("#email").value;
     const password = loginForm.querySelector("#password").value;
     const age = loginForm.querySelector("#age").valueAsNumber;
+    const formError = document.querySelector(".form-errors");
 
     if (username && email && password && age) {
       const user = {
@@ -82,9 +83,20 @@ window.addEventListener("load", () => {
         age,
       };
 
-      console.log(user);
-
-      location.href = "feed.html";
+      const auth = firebase.auth();
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          formError.style.display = "block";
+        });
     }
   });
 });
