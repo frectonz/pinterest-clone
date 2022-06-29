@@ -32,8 +32,8 @@ html {
 }
 
 .background .form {
-  padding: 2rem 4rem;
   margin: 1rem;
+  padding: 2rem 4rem;
   text-align: center;
   border-radius: 20px;
   background-color: #ffffff;
@@ -43,8 +43,20 @@ html {
   .form-title {
     display: none;
   }
+
   .background .form {
     padding: 1rem 1.5rem;
+  }
+
+  .background > .column:nth-child(1) {
+    display: none;
+  }
+
+  .background > .column:nth-child(2) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
   }
 }
 
@@ -135,4 +147,37 @@ fieldset input {
 
 .legal-notice span {
   color: var(--color-primary);
+}
+
+.tabs {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.tabs > button {
+  border: none;
+  background: none;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: var(--color-secondary);
+}
+
+.tabs > button:hover {
+  background-color: var(--color-secondary-darken);
+}
+
+.tabs > button:active {
+  transform: scale(0.8);
+}
+
+.tabs > button.active {
+  color: white;
+  background-color: var(--color-primary);
+}
+
+.tabs > button.active:hover {
+  background-color: var(--color-primary-darken);
 }

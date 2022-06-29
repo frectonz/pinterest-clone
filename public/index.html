@@ -19,42 +19,6 @@
     <link rel="stylesheet" href="./css/footer.css" />
 
     <title>Pinterest Clone</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/9.8.4/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/9.8.4/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-database-compat.js"></script>
-    <script
-      defer
-      src="/__/firebase/9.8.4/firebase-firestore-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/9.8.4/firebase-functions-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/9.8.4/firebase-messaging-compat.js"
-    ></script>
-    <script defer src="/__/firebase/9.8.4/firebase-storage-compat.js"></script>
-    <script
-      defer
-      src="/__/firebase/9.8.4/firebase-analytics-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/9.8.4/firebase-remote-config-compat.js"
-    ></script>
-    <script
-      defer
-      src="/__/firebase/9.8.4/firebase-performance-compat.js"
-    ></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
   </head>
   <body>
     <header>
@@ -184,7 +148,7 @@
       </div>
 
       <div class="column">
-        <form class="form" id="loginForm">
+        <form class="form" id="signInForm">
           <img src="./favicon.png" alt="logo" />
           <div class="form-header">
             <h1>Welcome to Pinterest</h1>
@@ -196,7 +160,14 @@
             <p>Please try again!</p>
           </div>
 
-          <fieldset>
+          <div class="tabs">
+            <button class="active" type="button" id="signUpTabButton">
+              Sign Up
+            </button>
+            <button type="button" id="logInTabButton">Log In</button>
+          </div>
+
+          <fieldset id="usernameField">
             <input
               type="text"
               id="username"
@@ -206,7 +177,7 @@
             />
           </fieldset>
 
-          <fieldset>
+          <fieldset id="emailField">
             <input
               type="email"
               id="email"
@@ -216,18 +187,18 @@
             />
           </fieldset>
 
-          <fieldset>
+          <fieldset id="passwordField">
             <input
               id="password"
               type="password"
-              placeholder="Create a password"
+              placeholder="Password"
               autocomplete="current-password"
               required
             />
           </fieldset>
 
-          <fieldset>
-            <input type="number" id="age" placeholder="Age" min="0" max="100" />
+          <fieldset id="ageField">
+            <input type="number" id="age" placeholder="Age" min="18" />
           </fieldset>
 
           <button type="submit" class="btn btn-primary">Continue</button>
@@ -260,8 +231,6 @@
             </p>
             <p>and acknowledge you've read our <span> Privacy Policy</span></p>
           </div>
-
-          <a href="#">Already a member? Log in</a>
         </form>
       </div>
     </section>
@@ -278,44 +247,29 @@
       <a href="#" class="link">Explore</a>
     </footer>
 
-    <script type="module" src="./js/main.js"></script>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyC8Jwxim8hC9PQ2tfk0LnBWxOrEGk7DOj8",
+        authDomain: "pinterest-clone-3cb86.firebaseapp.com",
+        projectId: "pinterest-clone-3cb86",
+        storageBucket: "pinterest-clone-3cb86.appspot.com",
+        messagingSenderId: "1024140803706",
+        appId: "1:1024140803706:web:a194c22ce850b9534e45c3",
+        measurementId: "G-6LQKFX1W7B",
+      };
 
-        try {
-          let app = firebase.app();
-          let features = [
-            "auth",
-            "database",
-            "firestore",
-            "functions",
-            "messaging",
-            "storage",
-            "analytics",
-            "remoteConfig",
-            "performance",
-          ].filter((feature) => typeof app[feature] === "function");
-          console.log(`Firebase SDK loaded with ${features.join(", ")}`);
-        } catch (e) {
-          console.error(e);
-          console.log("Error loading the Firebase SDK, check the console.");
-        }
-      });
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
     </script>
+    <script type="module" src="./js/main.js" defer></script>
   </body>
 </html>
