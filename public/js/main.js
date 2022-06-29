@@ -2,6 +2,9 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  getRedirectResult,
+  signInWithRedirect,
 } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
 
 const colors = ["#c28b00", "#618c7b", "#0076d3", "#407a57"];
@@ -172,11 +175,28 @@ const handleError = (error) => {
   submitButton.textContent = "Continue";
 };
 
-const auth = getAuth();
-const user = auth.currentUser;
+const googleSignInButton = document.querySelector("#google");
 
-if (user) {
-  console.log(user);
-} else {
-  console.log("no user");
-}
+googleSignInButton.addEventListener("click", () => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  signInWithRedirect(auth, provider);
+});
+
+window.addEventListener("load", () => {
+  const auth = getAuth();
+  getRedirectResult(auth)
+    .then((result) => {
+      const user = result.user;
+      if (user) {
+        window.location.href = "/feed.html";
+      }
+    })
+    .catch((error) => {
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+      console.log("error", { ...error });
+      console.log("credential", credential);
+    });
+});

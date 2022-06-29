@@ -50,13 +50,6 @@ chips.append(...chipButtons);
 
 const auth = getAuth();
 
-const user = auth.currentUser;
-if (user) {
-  console.log("user", user);
-} else {
-  console.log("no user");
-}
-
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("USER", user);

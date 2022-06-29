@@ -104,11 +104,13 @@ fieldset input {
 }
 
 .social-button {
+  border: none;
   gap: 10px;
   display: flex;
   padding: 10px 5px;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .social-button:hover {
@@ -122,6 +124,10 @@ fieldset input {
 
 #google:hover {
   background-color: #c23321;
+}
+
+#google:active {
+  transform: translateY(2px) scale(0.95);
 }
 
 #google > svg {
