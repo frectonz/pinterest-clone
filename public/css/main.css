@@ -89,6 +89,7 @@ fieldset input {
 
 .form > .form-errors {
   padding: 1rem;
+  margin-bottom: 10px;
   border-radius: 10px;
   color: white;
   background-color: var(--color-primary);

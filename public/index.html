@@ -157,7 +157,6 @@
 
           <div class="form-errors" id="form-error">
             <p>Something went wrong!</p>
-            <p>Please try again!</p>
           </div>
 
           <div class="tabs">
@@ -169,8 +168,8 @@
 
           <fieldset id="usernameField">
             <input
-              type="text"
               id="username"
+              type="text"
               placeholder="Username"
               autocomplete="username"
               required
@@ -179,8 +178,8 @@
 
           <fieldset id="emailField">
             <input
-              type="email"
               id="email"
+              type="email"
               placeholder="Email"
               autocomplete="email"
               required
@@ -198,10 +197,12 @@
           </fieldset>
 
           <fieldset id="ageField">
-            <input type="number" id="age" placeholder="Age" min="18" />
+            <input id="age" type="number" placeholder="Age" min="18" required />
           </fieldset>
 
-          <button type="submit" class="btn btn-primary">Continue</button>
+          <button type="submit" class="btn btn-primary" id="submitButton">
+            Continue
+          </button>
 
           <h3 class="or">OR</h3>
 

@@ -1,5 +1,6 @@
 import {
   getAuth,
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
 
@@ -80,13 +81,25 @@ const usernameField = document.querySelector("#usernameField");
 const emailField = signInForm.querySelector("#emailField");
 const passwordField = signInForm.querySelector("#passwordField");
 const ageField = signInForm.querySelector("#ageField");
+
 const formError = signInForm.querySelector("#form-error");
+const errorMessage = signInForm.querySelector("#form-error > p");
+
+const usernameElement = signInForm.querySelector("#username");
+const emailElement = signInForm.querySelector("#email");
+const passwordElement = signInForm.querySelector("#password");
+const ageElement = signInForm.querySelector("#age");
+
+const submitButton = document.querySelector("#submitButton");
 
 logInTabButton.addEventListener("click", () => {
   signInState = "LOG_IN";
 
   ageField.style.display = "none";
+  ageElement.disabled = true;
+
   usernameField.style.display = "none";
+  usernameElement.disabled = true;
 
   logInTabButton.classList.add("active");
   signUpTabButton.classList.remove("active");
@@ -96,7 +109,10 @@ signUpTabButton.addEventListener("click", () => {
   signInState = "SIGN_UP";
 
   ageField.style.display = "block";
+  ageElement.disabled = false;
+
   usernameField.style.display = "block";
+  usernameElement.disabled = false;
 
   signUpTabButton.classList.add("active");
   logInTabButton.classList.remove("active");
@@ -105,56 +121,52 @@ signUpTabButton.addEventListener("click", () => {
 signInForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const username = signInForm.querySelector("#username").value;
-  const email = signInForm.querySelector("#email").value;
-  const password = signInForm.querySelector("#password").value;
-  const age = signInForm.querySelector("#age").valueAsNumber;
-  const formError = signInForm.querySelector(".form-errors");
+  const username = usernameElement.value;
+  const email = emailElement.value;
+  const password = passwordElement.value;
+  const age = ageElement.valueAsNumber;
 
-  if (username && email && password && age) {
-    const user = {
-      username,
-      email,
-      password,
-      age,
-    };
-
-    if (signInState === "SIGN_UP") {
-      signUp(user.email, user.password, formError);
-    } else if (signInState === "LOG_IN") {
-      logIn(user.email, user.password, formError);
-    }
+  if (signInState === "SIGN_UP" && username && email && password && age) {
+    submitButton.textContent = "Submitting...";
+    signUp(email, password);
+  } else if (signInState === "LOG_IN" && email && password) {
+    submitButton.textContent = "Submitting...";
+    logIn(email, password);
   }
 });
 
-const signUp = (email, password, formError) => {
+const signUp = (email, password) => {
   const auth = getAuth();
 
   createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log(user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-      formError.style.display = "block";
-    });
+    .then(handleSuccess)
+    .catch(handleError);
 };
 
-const logIn = (email, password, formError) => {
+const logIn = (email, password) => {
   const auth = getAuth();
 
   signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log(user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-      formError.style.display = "block";
-    });
+    .then(handleSuccess)
+    .catch(handleError);
+};
+
+const handleSuccess = (userCredential) => {
+  console.log(userCredential);
+  submitButton.textContent = "Submitted 🎉";
+};
+
+const handleError = (error) => {
+  const errorCode = error.code;
+
+  if (errorCode === "auth/email-already-in-use") {
+    errorMessage.textContent = "Email already in use!";
+  } else if (errorCode === "auth/invalid-email") {
+    errorMessage.textContent = "Invalid email!";
+  } else {
+    errorMessage.textContent = "Something went wrong!";
+  }
+
+  formError.style.display = "block";
+  submitButton.textContent = "Continue";
 };
