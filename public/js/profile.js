@@ -6,13 +6,13 @@ import setupPinMenus from "./utils/pinMenus.js";
 import serializeForm from "./utils/serializeForm.js";
 import {
   getAuth,
-  updateProfile,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
 import {
   doc,
   query,
   where,
+  getDoc,
   getDocs,
   updateDoc,
   collection,
@@ -29,8 +29,6 @@ import confetti from "https://cdn.skypack.dev/canvas-confetti";
 
 setupSearchBar();
 setupHeaderMenus();
-// setupPinGrid();
-// setupPinMenus();
 
 const profileOptionsMenuInvoker = document.querySelector(
   "#profileOptionsMenuInvoker"
@@ -53,6 +51,41 @@ const bioTextarea = document.querySelector("textarea#bio");
 const usernameInput = document.querySelector("input#username");
 const avatarImageInput = document.querySelector("input#avatar");
 
+const profileId = new URL(window.location.href).searchParams.get("id");
+const actionsContainer = document.querySelector(".profile > .actions");
+
+if (profileId) {
+  actionsContainer.innerHTML = `
+    <button class="btn btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path
+              d="M21 14c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2v-6c0-1.1.9-2 2-2s2 .9 2 2v4h14v-4c0-1.1.9-2 2-2zM8.82 8.84c-.78.78-2.05.79-2.83 0-.78-.78-.79-2.04-.01-2.82L11.99 0l6.02 6.01c.78.78.79 2.05.01 2.83-.78.78-2.05.79-2.83 0l-1.2-1.19v6.18a2 2 0 1 1-4 0V7.66L8.82 8.84z"
+            />
+          </svg>
+        </button>
+        <button class="btn btn-primary">Follow</button>
+
+        <div class="dropdown">
+          <button class="btn btn-secondary" id="profileOptionsMenuInvoker">
+            <svg width="16" height="16" viewBox="0 0 24 24">
+              <path
+                d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"
+              />
+            </svg>
+          </button>
+
+          <div
+            class="dropdown-content"
+            id="profileOptionsMenu"
+            style="width: 150px"
+          >
+            <a href="#">Block</a>
+            <a href="#">Report</a>
+          </div>
+        </div>
+    `;
+}
+
 function updateDisplayName(d) {
   document.title = d;
   displayName.textContent = d;
@@ -70,7 +103,9 @@ function updateAvatar(a) {
     .then((url) => {
       avatarImage.src = url;
       avatarImagePreview.src = url;
-      avatarImageFull.style.backgroundImage = `url(${url})`;
+      if (profileId === null) {
+        avatarImageFull.style.backgroundImage = `url(${url})`;
+      }
     })
     .catch((err) => console.log({ ...err }));
 }
@@ -89,25 +124,25 @@ async function updateUserProfile(userId) {
     querySnapshot.forEach((doc) => {
       const data = doc.data();
 
-      if (data.username) {
+      if (data.username && profileId === null) {
         updateUsername(data.username);
       }
 
-      if (data.firstname) {
+      if (data.firstname && profileId === null) {
         updateDisplayName(data.firstname);
         firstnameInput.value = data.firstname;
       }
 
-      if (data.lastname) {
+      if (data.lastname && profileId === null) {
         updateDisplayName(data.lastname);
         lastnameInput.value = data.lastname;
       }
 
-      if (data.firstname && data.lastname) {
+      if (data.firstname && data.lastname && profileId === null) {
         updateDisplayName(data.firstname + " " + data.lastname);
       }
 
-      if (data.bio) {
+      if (data.bio && profileId === null) {
         updateBio(data.bio);
       }
 
@@ -121,10 +156,64 @@ async function updateUserProfile(userId) {
 }
 
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    updateUserProfile(user.uid);
-  } else {
+  if (!user) {
     window.location.href = "/#form";
+  }
+
+  if (profileId) {
+    const db = getFirestore();
+    const docSnap = await getDoc(doc(db, "users", profileId));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+
+      if (data.username) {
+        updateUsername(data.username);
+      }
+
+      if (data.firstname) {
+        updateDisplayName(data.firstname);
+      }
+
+      if (data.lastname) {
+        updateDisplayName(data.lastname);
+      }
+
+      if (data.firstname && data.lastname) {
+        updateDisplayName(data.firstname + " " + data.lastname);
+      }
+
+      if (data.bio) {
+        updateBio(data.bio);
+      }
+
+      if (data.avatarURL) {
+        const storage = getStorage();
+        const gsReference = ref(storage, data.avatarURL);
+        getDownloadURL(gsReference)
+          .then((url) => {
+            avatarImageFull.style.backgroundImage = `url(${url})`;
+          })
+          .catch((err) => console.log({ ...err }));
+      }
+
+      console.log(data);
+
+      setupPinGrid({
+        name: "CREATED",
+        uid: data.userId,
+      }).then(() => {
+        setupPinMenus();
+      });
+
+      updateUserProfile(user.uid);
+    } else {
+      window.location.href = "/profile.html";
+    }
+  } else {
+    updateUserProfile(user.uid);
+    setupPinGrid({ name: "CREATED", uid: user.uid }).then(() => {
+      setupPinMenus();
+    });
   }
 });
 
@@ -135,9 +224,11 @@ const cancelEditProfileButton = document.querySelector(
   "#cancelEditProfileButton"
 );
 
-editProfileButton.addEventListener("click", () => {
-  openModal();
-});
+if (!profileId) {
+  editProfileButton.addEventListener("click", () => {
+    openModal();
+  });
+}
 
 backdrop.addEventListener("click", () => closeModal());
 cancelEditProfileButton.addEventListener("click", () => closeModal());
@@ -238,4 +329,34 @@ avatarImageInput.addEventListener("change", () => {
   reader.onerror = (e) => {
     fileLabel.textContent = "Change";
   };
+});
+
+const createdButton = document.querySelector("#createdButton");
+const savedButton = document.querySelector("#savedButton");
+const pinGrid = document.querySelector("#pinGrid");
+
+createdButton.addEventListener("click", () => {
+  createdButton.className = "active";
+  savedButton.className = "";
+  const auth = getAuth();
+  pinGrid.innerHTML = "";
+  setupPinGrid({
+    name: "CREATED",
+    uid: profileId || auth.currentUser.uid,
+  }).then(() => {
+    setupPinMenus();
+  });
+});
+
+savedButton.addEventListener("click", () => {
+  savedButton.className = "active";
+  createdButton.className = "";
+  const auth = getAuth();
+  pinGrid.innerHTML = "";
+  setupPinGrid({
+    name: "SAVED",
+    uid: profileId || auth.currentUser.uid,
+  }).then(() => {
+    setupPinMenus();
+  });
 });

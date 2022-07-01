@@ -151,6 +151,7 @@ function closeModal() {
 
 const newPinForm = document.querySelector("#newPinForm");
 const saveNewPinForm = document.querySelector("#saveNewPinForm");
+const pinGrid = document.querySelector("#pinGrid");
 
 newPinForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -170,6 +171,10 @@ newPinForm.addEventListener("submit", async (e) => {
       });
       saveNewPinForm.textContent = "Saved 🎉";
       closeNewPinModalButton.textContent = "Close";
+      pinGrid.innerHTML = "";
+      setupPinGrid().then(() => {
+        setupPinMenus();
+      });
       confetti();
     }
   } catch (error) {

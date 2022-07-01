@@ -1,4 +1,9 @@
 import {
+  doc,
+  query,
+  where,
+  addDoc,
+  getDoc,
   getDocs,
   collection,
   getFirestore,
@@ -8,9 +13,12 @@ import {
   getStorage,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-storage.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
 
-const pinHTML = `
-  <button class="save btn btn-primary">Save</button>
+const pinHTML = (id, saved) => `
+  <button class="save btn ${
+    saved ? "btn-secondary" : "btn-primary"
+  }" id="savePinButton" data-pin="${id}">${saved ? "Saved" : "Save"}</button>
   <div class="dropdown">
     <button class="btn btn-secondary pin-menu">
       <svg width="16" height="16" viewBox="0 0 24 24">
@@ -25,19 +33,30 @@ const pinHTML = `
   </div>
 `;
 
-export default async function setupPinGrid() {
+export default async function setupPinGrid(option = {}) {
   const pinGrid = document.querySelector("#pinGrid");
 
-  const db = getFirestore();
-  const querySnapshot = await getDocs(collection(db, "pins"));
-  const imagePins = [];
-
-  querySnapshot.forEach((doc) => {
+  const viewPin = async (doc, itIsStarred = false) => {
     const pin = doc.data();
+
+    let saved = false;
+    if (!itIsStarred) {
+      const db = getFirestore();
+      const auth = getAuth();
+      const savedQuery = query(
+        collection(db, "stars"),
+        where("user", "==", auth.currentUser.uid),
+        where("pin", "==", doc.id)
+      );
+      const snapshot = await getDocs(savedQuery);
+      snapshot.forEach(() => {
+        saved = true;
+      });
+    }
 
     const div = document.createElement("div");
     div.classList.add("pin");
-    div.innerHTML = pinHTML;
+    div.innerHTML = pinHTML(doc.id, itIsStarred ? true : saved);
 
     const storage = getStorage();
     const gsReference = ref(storage, pin.pin);
@@ -51,8 +70,50 @@ export default async function setupPinGrid() {
       location.href = `/pin.html?id=${doc.id}`;
     });
 
-    imagePins.push(div);
-  });
+    pinGrid.appendChild(div);
+  };
 
-  pinGrid.append(...imagePins);
+  const db = getFirestore();
+
+  if (option.name === "CREATED") {
+    const querySnapshot = await getDocs(
+      query(collection(db, "pins"), where("creator", "==", option.uid))
+    );
+    querySnapshot.forEach(viewPin);
+  } else if (option.name === "SAVED") {
+    const stars = await getDocs(
+      query(collection(db, "stars"), where("user", "==", option.uid))
+    );
+    stars.forEach((star) => {
+      const starData = star.data();
+      getDoc(doc(db, "pins", starData.pin)).then((pin) => {
+        viewPin(pin, true);
+      });
+    });
+  } else {
+    const querySnapshot = await getDocs(collection(db, "pins"));
+    querySnapshot.forEach(viewPin);
+  }
+
+  const savePinButton = document.querySelectorAll("#savePinButton");
+  savePinButton.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
+      button.textContent = "Saving..";
+      const pinId = e.target.dataset.pin;
+      const db = getFirestore();
+      const auth = getAuth();
+      addDoc(collection(db, "stars"), {
+        pin: pinId,
+        user: auth.currentUser.uid,
+      })
+        .then(() => {
+          button.textContent = "Saved";
+          button.disabled = true;
+          button.classList.remove("btn-primary");
+          button.classList.add("btn-secondary");
+        })
+        .catch(() => (button.textContent = "Save"));
+    });
+  });
 }
