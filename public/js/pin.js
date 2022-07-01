@@ -17,6 +17,7 @@ import {
   doc,
   query,
   where,
+  addDoc,
   getDoc,
   getDocs,
   collection,
@@ -25,7 +26,6 @@ import {
 
 setupSearchBar();
 setupHeaderMenus();
-// setupPinGrid().then(() => setupPinMenus());
 
 const singlePinMenuInvoker = document.querySelector("#singlePinMenuInvoker");
 const singlePinMenu = document.querySelector("#singlePinMenu");
@@ -39,6 +39,8 @@ const pinDescription = document.querySelector("#pinDescription");
 const creatorName = document.querySelector("#creatorName");
 const creatorAvatarImg = document.querySelector("#creatorAvatarImg");
 const pinCreatorAvatarLink = document.querySelector("#pinCreatorAvatar");
+
+const savePinButton = document.querySelector("#savePinButton");
 
 const pinId = new URL(window.location.href).searchParams.get("id");
 
@@ -84,6 +86,10 @@ if (pinId) {
           }
         })
       );
+
+      setupPinGrid({ name: "CREATED", uid: data.creator }).then(() => {
+        setupPinMenus();
+      });
     } else {
       location.href = "/feed.html";
     }
@@ -125,5 +131,39 @@ onAuthStateChanged(auth, async (user) => {
     });
   } catch (error) {
     console.log(error);
+  }
+
+  if (pinId) {
+    const savedQuery = query(
+      collection(db, "stars"),
+      where("user", "==", user.uid),
+      where("pin", "==", pinId)
+    );
+
+    savePinButton.style.display = "block";
+    getDocs(savedQuery).then((snapshot) => {
+      snapshot.forEach(() => {
+        savePinButton.textContent = "Saved";
+        savePinButton.disabled = true;
+        savePinButton.classList.remove("btn-primary");
+        savePinButton.classList.add("btn-secondary");
+      });
+    });
+
+    savePinButton.addEventListener("click", () => {
+      savePinButton.textContent = "Saving..";
+      const auth = getAuth();
+      addDoc(collection(db, "stars"), {
+        pin: pinId,
+        user: auth.currentUser.uid,
+      })
+        .then(() => {
+          savePinButton.textContent = "Saved 🎉";
+          savePinButton.disabled = true;
+          savePinButton.classList.remove("btn-primary");
+          savePinButton.classList.add("btn-secondary");
+        })
+        .catch(() => (savePinButton.textContent = "Save"));
+    });
   }
 });

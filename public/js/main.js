@@ -151,7 +151,7 @@ const signUp = async (email, password, username, age) => {
       password
     );
     const uid = userResult.user.uid;
-    const docResult = await addDoc(collection(db, "users"), {
+    await addDoc(collection(db, "users"), {
       age,
       bio: "",
       username,
