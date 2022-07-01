@@ -3,7 +3,7 @@
   right: 20px;
   bottom: 20px;
   border: none;
-  padding: 1rem;
+  padding: 1.3rem;
   cursor: pointer;
   background: none;
   border-radius: 50%;
@@ -21,6 +21,10 @@
 
 .fab:hover {
   background-color: var(--color-secondary-darken);
+}
+
+.fab:active {
+  transform: scale(0.9) translateY(2px);
 }
 
 @media (max-width: 768px) {

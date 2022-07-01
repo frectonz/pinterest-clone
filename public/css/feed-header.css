@@ -58,3 +58,7 @@ header > * {
   height: 30px;
   border-radius: 50%;
 }
+
+.dropdown .avatar img:hover {
+  border: 2px solid var(--color-primary);
+}

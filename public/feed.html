@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/dropdown.css" />
     <link rel="stylesheet" href="./css/pin-grid.css" />
     <link rel="stylesheet" href="./css/feed-header.css" />
+    <link rel="stylesheet" href="./css/feed.css" />
 
     <title>Home Feed</title>
   </head>
@@ -48,7 +49,7 @@
       <div class="dropdown" id="profileDropdown">
         <button class="avatar">
           <a href="/profile.html">
-            <img src="./images/avatar-girl.jpg" alt="avatar" />
+            <img src="./images/avatar.png" alt="avatar" id="avatarImage" />
           </a>
           <svg id="avatarBtn" width="12" height="12" viewBox="0 0 24 24">
             <path
@@ -77,13 +78,69 @@
 
     <main class="pin-grid" id="pinGrid"></main>
 
-    <button class="fab">
+    <button class="fab" id="createNewPinButton">
       <svg width="20" height="20" viewBox="0 0 24 24">
         <path
           d="M22 10h-8V2a2 2 0 0 0-4 0v8H2a2 2 0 0 0 0 4h8v8a2 2 0 0 0 4 0v-8h8a2 2 0 0 0 0-4"
         />
       </svg>
     </button>
+
+    <div id="backdrop"></div>
+    <div class="new-pin-modal" id="newPinModal">
+      <form id="newPinForm">
+        <div>
+          <fieldset id="pinFileInput">
+            <label for="pin" id="pinLabel">
+              <svg height="32" width="32" viewBox="0 0 24 24">
+                <path
+                  d="M24 12c0-6.627-5.372-12-12-12C5.373 0 0 5.373 0 12s5.373 12 12 12c6.628 0 12-5.373 12-12zm-10.767 3.75a1.25 1.25 0 0 1-2.5 0v-3.948l-1.031 1.031a1.25 1.25 0 0 1-1.768-1.768L12 7l4.066 4.065a1.25 1.25 0 0 1-1.768 1.768l-1.065-1.065v3.982z"
+                ></path>
+              </svg>
+              <p>Drag and drop or click to upload</p>
+            </label>
+            <input type="file" name="pin" id="pin" required />
+          </fieldset>
+        </div>
+        <div>
+          <fieldset>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              placeholder="Add your title"
+              required
+            />
+          </fieldset>
+
+          <fieldset>
+            <textarea
+              type="text"
+              name="description"
+              id="description"
+              placeholder="Tell everyone what your pin is about"
+              rows="10"
+              required
+            ></textarea>
+          </fieldset>
+
+          <p class="error">Something went wrong!</p>
+
+          <div>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="closeNewPinModalButton"
+            >
+              Cancel
+            </button>
+            <button class="btn btn-primary" type="submit" id="saveNewPinForm">
+              Save
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
 
     <script type="module" src="./js/firebase-init.js" defer></script>
     <script type="module" src="./js/feed.js" defer></script>

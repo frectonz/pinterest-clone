@@ -1,3 +1,14 @@
+import {
+  getDocs,
+  collection,
+  getFirestore,
+} from "https://www.gstatic.com/firebasejs/9.8.4/firebase-firestore.js";
+import {
+  ref,
+  getStorage,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/9.8.4/firebase-storage.js";
+
 const pinHTML = `
   <button class="save btn btn-primary">Save</button>
   <div class="dropdown">
@@ -14,47 +25,33 @@ const pinHTML = `
   </div>
 `;
 
-export default function setupPinGrid() {
+export default async function setupPinGrid() {
   const pinGrid = document.querySelector("#pinGrid");
 
-  const images = [
-    "./images/carousel/1.jpg",
-    "./images/carousel/2.jpg",
-    "./images/carousel/3.jpg",
-    "./images/carousel/4.jpg",
-    "./images/carousel/5.jpg",
-    "./images/carousel/6.jpg",
-    "./images/carousel/7.jpg",
-    "./images/bathroom.jpg",
-    "./images/bottle.jpg",
-    "./images/deck.jpg",
-    "./images/fern.jpg",
-    "./images/scandinavian.jpg",
-    "./images/side-image.png",
-    "./images/beach.jpg",
-    "./images/cake.jpg",
-    "./images/mom-and-baby.jpg",
-    "./images/night.jpg",
-    "./images/building.jpg",
-    "./images/dog.jpg",
-    "./images/desert-night.jpg",
-    "./images/rocks.jpg",
-    "./images/cookies.jpg",
-    "./images/flower.jpg",
-    "./images/galaxy.jpg",
-  ];
+  const db = getFirestore();
+  const querySnapshot = await getDocs(collection(db, "pins"));
+  const imagePins = [];
 
-  const imagePins = images.map((image) => {
+  querySnapshot.forEach((doc) => {
+    const pin = doc.data();
+
     const div = document.createElement("div");
     div.classList.add("pin");
     div.innerHTML = pinHTML;
-    div.style.backgroundImage = `url(${image})`;
 
-    div.addEventListener("click", () => {
-      location.href = `/pin.html?id=${image}`;
+    const storage = getStorage();
+    const gsReference = ref(storage, pin.pin);
+    getDownloadURL(gsReference)
+      .then((url) => {
+        div.style.backgroundImage = `url(${url})`;
+      })
+      .catch((err) => console.log({ ...err }));
+
+    div.addEventListener("click", (e) => {
+      location.href = `/pin.html?id=${doc.id}`;
     });
 
-    return div;
+    imagePins.push(div);
   });
 
   pinGrid.append(...imagePins);

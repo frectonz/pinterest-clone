@@ -1,11 +1,15 @@
 import {
   getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  getRedirectResult,
-  signInWithRedirect,
 } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
+import {
+  addDoc,
+  collection,
+  getFirestore,
+} from "https://www.gstatic.com/firebasejs/9.8.4/firebase-firestore.js";
 
 const colors = ["#c28b00", "#618c7b", "#0076d3", "#407a57"];
 const labels = [
@@ -81,8 +85,6 @@ const logInTabButton = document.querySelector("#logInTabButton");
 const signUpTabButton = document.querySelector("#signUpTabButton");
 
 const usernameField = document.querySelector("#usernameField");
-const emailField = signInForm.querySelector("#emailField");
-const passwordField = signInForm.querySelector("#passwordField");
 const ageField = signInForm.querySelector("#ageField");
 
 const formError = signInForm.querySelector("#form-error");
@@ -131,31 +133,49 @@ signInForm.addEventListener("submit", (e) => {
 
   if (signInState === "SIGN_UP" && username && email && password && age) {
     submitButton.textContent = "Submitting...";
-    signUp(email, password);
+    signUp(email, password, username, age);
   } else if (signInState === "LOG_IN" && email && password) {
     submitButton.textContent = "Submitting...";
     logIn(email, password);
   }
 });
 
-const signUp = (email, password) => {
+const signUp = async (email, password, username, age) => {
   const auth = getAuth();
+  const db = getFirestore();
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(handleSuccess)
-    .catch(handleError);
+  try {
+    const userResult = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const uid = userResult.user.uid;
+    const docResult = await addDoc(collection(db, "users"), {
+      age,
+      bio: "",
+      username,
+      userId: uid,
+      avatarURL: "",
+      firstname: "",
+      lastname: "",
+    });
+
+    handleEmailAndPasswordSuccess();
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 const logIn = (email, password) => {
   const auth = getAuth();
 
   signInWithEmailAndPassword(auth, email, password)
-    .then(handleSuccess)
+    .then(handleEmailAndPasswordSuccess)
     .catch(handleError);
 };
 
-const handleSuccess = (userCredential) => {
-  console.log(userCredential);
+const handleEmailAndPasswordSuccess = () => {
   submitButton.textContent = "Submitted 🎉";
   window.location.href = "/feed.html";
 };
@@ -178,14 +198,13 @@ const handleError = (error) => {
 const googleSignInButton = document.querySelector("#google");
 
 googleSignInButton.addEventListener("click", () => {
+  const buttonContent = googleSignInButton.querySelector("span");
+  buttonContent.textContent = "Continuing...";
+
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
-  signInWithRedirect(auth, provider);
-});
 
-window.addEventListener("load", () => {
-  const auth = getAuth();
-  getRedirectResult(auth)
+  signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
       if (user) {
@@ -193,10 +212,7 @@ window.addEventListener("load", () => {
       }
     })
     .catch((error) => {
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-      console.log("error", { ...error });
-      console.log("credential", credential);
+      handleError(error);
+      buttonContent.textContent = "Continue with Google";
     });
 });

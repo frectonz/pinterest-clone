@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="./css/feed-header.css" />
     <link rel="stylesheet" href="./css/comment-form.css" />
 
-    <title>Single Pin</title>
+    <title>...</title>
   </head>
   <body>
     <header>
@@ -47,9 +47,11 @@
       </div>
 
       <div class="dropdown" id="profileDropdown">
-        <button class="avatar" id="avatarBtn">
-          <img src="./images/avatar.jpeg" alt="avatar" />
-          <svg width="12" height="12" viewBox="0 0 24 24">
+        <button class="avatar">
+          <a href="./profile.html">
+            <img src="./images/avatar.png" alt="avatar" id="avatarImage" />
+          </a>
+          <svg id="avatarBtn" width="12" height="12" viewBox="0 0 24 24">
             <path
               d="M12 19.5.66 8.29c-.88-.86-.88-2.27 0-3.14.88-.87 2.3-.87 3.18 0L12 13.21l8.16-8.06c.88-.87 2.3-.87 3.18 0 .88.87.88 2.28 0 3.14L12 19.5z"
             />
@@ -115,13 +117,14 @@
               <button class="btn btn-primary">Save</button>
             </div>
           </div>
-          <h1 class="pin-title">Hello There</h1>
+          <h1 class="pin-title" id="pinTitle">...</h1>
+          <p style="margin-bottom: 1rem" id="pinDescription">...</p>
           <div class="pin-creator">
-            <a href="/profile2.html" class="pin-avatar">
-              <div class="pin-avatar-img"></div>
+            <a id="pinCreatorAvatar" href="#" class="pin-avatar">
+              <div class="pin-avatar-img" id="creatorAvatarImg"></div>
               <div>
-                <h4>John Doe</h4>
-                <p>289.4k followers</p>
+                <h4 id="creatorName">...</h4>
+                <p>... followers</p>
               </div>
             </a>
             <button class="btn btn-secondary">Follow</button>
@@ -148,7 +151,7 @@
               <img src="./images/bathroom.jpg" />
               <div>
                 <span class="username">Katerina</span>
-                <span>Wonderful! Keep em coming!</span>
+                <span>Wonderful!</span>
               </div>
             </div>
             <button class="btn btn-secondary">See more</button>
@@ -167,6 +170,7 @@
 
     <section class="pin-grid" id="pinGrid"></section>
 
-    <script type="module" src="./js/pin.js"></script>
+    <script type="module" src="./js/firebase-init.js" defer></script>
+    <script type="module" src="./js/pin.js" defer></script>
   </body>
 </html>
