@@ -95,7 +95,7 @@ if (profileId) {
   const followButton = document.querySelector("#followButton");
 
   followButton.addEventListener("click", () => {
-    if (!(window.profileId && window.currentUserId)) {
+    if (!window.currentUserId) {
       return;
     }
 
@@ -116,6 +116,8 @@ if (profileId) {
 
   window.addEventListener("creatorIdChanged", () => {
     if (window.profileId && window.currentUserId) {
+      setupFollowStatus(window.profileId);
+
       const db = getFirestore();
       getDocs(
         query(
@@ -133,8 +135,6 @@ if (profileId) {
       });
     }
   });
-
-  setupFollowStatus(window.profileId);
 }
 
 function setupFollowStatus(id) {
@@ -145,7 +145,10 @@ function setupFollowStatus(id) {
   let followerCount = 0;
   getDocs(query(collection(db, "follows"), where("following", "==", id)))
     .then((snapshot) => {
-      snapshot.forEach(() => (followerCount += 1));
+      snapshot.forEach((doc) => {
+        console.log(doc);
+        followerCount += 1;
+      });
     })
     .finally(() => {
       followers.textContent = `${followerCount} follower${
@@ -156,9 +159,7 @@ function setupFollowStatus(id) {
   let followingCount = 0;
   getDocs(query(collection(db, "follows"), where("follower", "==", id)))
     .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        followingCount += 1;
-      });
+      snapshot.forEach(() => (followingCount += 1));
     })
     .finally(() => {
       following.textContent = `${followingCount} following`;
@@ -241,7 +242,10 @@ onAuthStateChanged(auth, async (user) => {
 
   window.currentUserId = user.uid;
   window.dispatchEvent(new Event("creatorIdChanged"));
-  setupFollowStatus(user.uid);
+  if (!profileId) {
+    console.log("nothing");
+    setupFollowStatus(user.uid);
+  }
 
   if (profileId) {
     const db = getFirestore();
