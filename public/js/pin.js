@@ -114,9 +114,11 @@ window.addEventListener("creatorIdChanged", () => {
           where("follower", "==", window.currentUserId),
           where("following", "==", window.pinCreatorId)
         )
-      ).then(() => {
-        followButton.textContent = "Followed";
-        followButton.disabled = true;
+      ).then((querySnapshot) => {
+        querySnapshot.forEach(() => {
+          followButton.textContent = "Followed";
+          followButton.disabled = true;
+        });
       });
 
       let followerCount = 0;
