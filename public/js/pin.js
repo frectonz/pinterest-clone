@@ -41,6 +41,9 @@ const pinCreatorAvatarLink = document.querySelector("#pinCreatorAvatar");
 
 const savePinButton = document.querySelector("#savePinButton");
 
+const followButton = document.querySelector("#followButton");
+const followerCountDisplay = document.querySelector("#followerCountDisplay");
+
 const pinId = new URL(window.location.href).searchParams.get("id");
 
 if (pinId) {
@@ -67,6 +70,10 @@ if (pinId) {
         querySnapshot.forEach((cd) => {
           if (cd.exists()) {
             const creatorData = cd.data();
+
+            window.pinCreatorId = creatorData.userId;
+            window.dispatchEvent(new Event("creatorIdChanged"));
+
             creatorName.textContent =
               creatorData.firstname + " " + creatorData.lastname ||
               creatorData.username;
@@ -95,6 +102,64 @@ if (pinId) {
   location.href = "/feed.html";
 }
 
+window.addEventListener("creatorIdChanged", () => {
+  if (window.pinCreatorId && window.currentUserId) {
+    if (window.pinCreatorId === window.currentUserId) {
+      followButton.style.display = "none";
+    } else {
+      const db = getFirestore();
+      getDocs(
+        query(
+          collection(db, "follows"),
+          where("follower", "==", window.currentUserId),
+          where("following", "==", window.pinCreatorId)
+        )
+      ).then(() => {
+        followButton.textContent = "Followed";
+        followButton.disabled = true;
+      });
+
+      let followerCount = 0;
+      getDocs(
+        query(
+          collection(db, "follows"),
+          where("following", "==", window.pinCreatorId)
+        )
+      )
+        .then((snapshot) => {
+          snapshot.forEach(() => (followerCount += 1));
+        })
+        .finally(() => {
+          if (followerCount === 0) {
+            followerCountDisplay.style.display = "none";
+          } else {
+            followerCountDisplay.textContent = `${followerCount} follower${
+              followerCount === 1 ? "" : "s"
+            }`;
+          }
+        });
+    }
+  }
+});
+
+followButton.addEventListener("click", () => {
+  if (!(window.pinCreatorId && window.currentUserId)) {
+    return;
+  }
+
+  followButton.textContent = "Following..";
+  const db = getFirestore();
+  addDoc(collection(db, "follows"), {
+    follower: window.currentUserId,
+    following: window.pinCreatorId,
+  })
+    .then(() => {
+      followButton.textContent = "Followed 🎉";
+      followButton.disabled = true;
+    })
+    .catch(() => (followButton.textContent = "Follow"));
+});
+
 const auth = getAuth();
 const avatarImage = document.querySelector("#avatarImage");
 const commentAvatarImg = document.querySelector(".comment-avatar-img");
@@ -114,6 +179,9 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "/#form";
   }
+
+  window.currentUserId = user.uid;
+  window.dispatchEvent(new Event("creatorIdChanged"));
 
   const db = getFirestore();
   const q = query(collection(db, "users"), where("userId", "==", user.uid));

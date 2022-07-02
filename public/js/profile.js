@@ -63,7 +63,7 @@ if (profileId) {
             />
           </svg>
         </button>
-        <button class="btn btn-primary">Follow</button>
+        <button class="btn btn-primary" id="followButton">Follow</button>
 
         <div class="dropdown">
           <button class="btn btn-secondary" id="profileOptionsMenuInvoker">
@@ -84,6 +84,83 @@ if (profileId) {
           </div>
         </div>
     `;
+
+  const profileOptionsMenuInvoker = document.querySelector(
+    "#profileOptionsMenuInvoker"
+  );
+  const profileOptionsMenu = document.querySelector("#profileOptionsMenu");
+
+  makeDropdown(profileOptionsMenuInvoker, profileOptionsMenu);
+
+  const followButton = document.querySelector("#followButton");
+
+  followButton.addEventListener("click", () => {
+    if (!(window.profileId && window.currentUserId)) {
+      return;
+    }
+
+    followButton.textContent = "Following..";
+    const db = getFirestore();
+    addDoc(collection(db, "follows"), {
+      follower: window.currentUserId,
+      following: window.profileId,
+    })
+      .then(() => {
+        followButton.textContent = "Followed 🎉";
+        followButton.disabled = true;
+        followButton.classList.add("btn-secondary");
+        followButton.classList.remove("btn-primary");
+      })
+      .catch(() => (followButton.textContent = "Follow"));
+  });
+
+  window.addEventListener("creatorIdChanged", () => {
+    if (window.profileId && window.currentUserId) {
+      const db = getFirestore();
+      getDocs(
+        query(
+          collection(db, "follows"),
+          where("follower", "==", window.currentUserId),
+          where("following", "==", window.profileId)
+        )
+      ).then(() => {
+        followButton.textContent = "Followed";
+        followButton.disabled = true;
+        followButton.classList.remove("btn-primary");
+        followButton.classList.add("btn-secondary");
+      });
+    }
+  });
+
+  setupFollowStatus(window.profileId);
+}
+
+function setupFollowStatus(id) {
+  const followers = document.querySelector("#followers");
+  const following = document.querySelector("#following");
+  const db = getFirestore();
+
+  let followerCount = 0;
+  getDocs(query(collection(db, "follows"), where("following", "==", id)))
+    .then((snapshot) => {
+      snapshot.forEach(() => (followerCount += 1));
+    })
+    .finally(() => {
+      followers.textContent = `${followerCount} follower${
+        followerCount === 1 ? "" : "s"
+      }`;
+    });
+
+  let followingCount = 0;
+  getDocs(query(collection(db, "follows"), where("follower", "==", id)))
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        followingCount += 1;
+      });
+    })
+    .finally(() => {
+      following.textContent = `${followingCount} following`;
+    });
 }
 
 function updateDisplayName(d) {
@@ -160,11 +237,19 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "/#form";
   }
 
+  window.currentUserId = user.uid;
+  window.dispatchEvent(new Event("creatorIdChanged"));
+  setupFollowStatus(user.uid);
+
   if (profileId) {
     const db = getFirestore();
     const docSnap = await getDoc(doc(db, "users", profileId));
     if (docSnap.exists()) {
       const data = docSnap.data();
+
+      window.profileId = data.userId;
+
+      window.dispatchEvent(new Event("creatorIdChanged"));
 
       if (data.username) {
         updateUsername(data.username);
@@ -195,8 +280,6 @@ onAuthStateChanged(auth, async (user) => {
           })
           .catch((err) => console.log({ ...err }));
       }
-
-      console.log(data);
 
       setupPinGrid({
         name: "CREATED",
