@@ -2,7 +2,6 @@ import makeDropdown from "./utils/dropdown.js";
 import setupSearchBar from "./utils/searchBar.js";
 import setupHeaderMenus from "./utils/headerMenus.js";
 import setupPinGrid from "./utils/pinGrid.js";
-import setupPinMenus from "./utils/pinMenus.js";
 
 import {
   getAuth,
@@ -87,9 +86,7 @@ if (pinId) {
         })
       );
 
-      setupPinGrid({ name: "CREATED", uid: data.creator }).then(() => {
-        setupPinMenus();
-      });
+      setupPinGrid({ name: "CREATED", uid: data.creator });
     } else {
       location.href = "/feed.html";
     }

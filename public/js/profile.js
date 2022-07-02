@@ -2,8 +2,8 @@ import makeDropdown from "./utils/dropdown.js";
 import setupSearchBar from "./utils/searchBar.js";
 import setupHeaderMenus from "./utils/headerMenus.js";
 import setupPinGrid from "./utils/pinGrid.js";
-import setupPinMenus from "./utils/pinMenus.js";
 import serializeForm from "./utils/serializeForm.js";
+
 import {
   getAuth,
   onAuthStateChanged,
@@ -201,19 +201,14 @@ onAuthStateChanged(auth, async (user) => {
       setupPinGrid({
         name: "CREATED",
         uid: data.userId,
-      }).then(() => {
-        setupPinMenus();
       });
-
       updateUserProfile(user.uid);
     } else {
       window.location.href = "/profile.html";
     }
   } else {
     updateUserProfile(user.uid);
-    setupPinGrid({ name: "CREATED", uid: user.uid }).then(() => {
-      setupPinMenus();
-    });
+    setupPinGrid({ name: "CREATED", uid: user.uid });
   }
 });
 
@@ -343,8 +338,6 @@ createdButton.addEventListener("click", () => {
   setupPinGrid({
     name: "CREATED",
     uid: profileId || auth.currentUser.uid,
-  }).then(() => {
-    setupPinMenus();
   });
 });
 
@@ -356,7 +349,5 @@ savedButton.addEventListener("click", () => {
   setupPinGrid({
     name: "SAVED",
     uid: profileId || auth.currentUser.uid,
-  }).then(() => {
-    setupPinMenus();
   });
 });

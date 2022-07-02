@@ -22,7 +22,6 @@ import confetti from "https://cdn.skypack.dev/canvas-confetti";
 import setupSearchBar from "./utils/searchBar.js";
 import setupHeaderMenus from "./utils/headerMenus.js";
 import setupPinGrid from "./utils/pinGrid.js";
-import setupPinMenus from "./utils/pinMenus.js";
 import serializeForm from "./utils/serializeForm.js";
 
 const tags = [
@@ -52,9 +51,7 @@ const tags = [
 
 setupSearchBar();
 setupHeaderMenus();
-setupPinGrid().then(() => {
-  setupPinMenus();
-});
+setupPinGrid();
 
 const chips = document.querySelector("#chips");
 
@@ -172,9 +169,7 @@ newPinForm.addEventListener("submit", async (e) => {
       saveNewPinForm.textContent = "Saved 🎉";
       closeNewPinModalButton.textContent = "Close";
       pinGrid.innerHTML = "";
-      setupPinGrid().then(() => {
-        setupPinMenus();
-      });
+      setupPinGrid();
       confetti();
     }
   } catch (error) {

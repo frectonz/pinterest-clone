@@ -15,6 +15,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-storage.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-auth.js";
 
+import setupPinMenus from "./pinMenus.js";
+
 const pinHTML = (id, saved) => `
   <button class="save btn ${
     saved ? "btn-secondary" : "btn-primary"
@@ -71,6 +73,9 @@ export default async function setupPinGrid(option = {}) {
     });
 
     pinGrid.appendChild(div);
+
+    setupSaveButtons();
+    setupPinMenus();
   };
 
   const db = getFirestore();
@@ -92,9 +97,11 @@ export default async function setupPinGrid(option = {}) {
     });
   } else {
     const querySnapshot = await getDocs(collection(db, "pins"));
-    querySnapshot.forEach(viewPin);
+    await querySnapshot.forEach(viewPin);
   }
+}
 
+function setupSaveButtons() {
   const savePinButton = document.querySelectorAll("#savePinButton");
   savePinButton.forEach((button) => {
     button.addEventListener("click", (e) => {
