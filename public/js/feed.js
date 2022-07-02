@@ -142,7 +142,7 @@ function closeModal() {
   newPinForm.reset();
   pinFileInput.style.display = "block";
   closeNewPinModalButton.textContent = "Cancel";
-  imagePreview.querySelector("img").remove();
+  imagePreview.style.backgroundImage = "";
   saveNewPinForm.textContent = "Save";
 }
 
@@ -215,9 +215,7 @@ pinInput.addEventListener("change", () => {
   reader.readAsDataURL(file);
   reader.onload = (e) => {
     const base64 = e.target.result;
-    const img = document.createElement("img");
-    img.src = base64;
     pinFileInput.style.display = "none";
-    imagePreview.appendChild(img);
+    imagePreview.style.backgroundImage = `url(${base64})`;
   };
 });

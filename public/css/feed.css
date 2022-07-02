@@ -19,7 +19,7 @@
   padding: 1rem;
   width: clamp(16rem, 90vw, 70rem);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  height: max(800px, 80vh);
+  height: max(800px, 90vh);
   border-radius: 0.5rem;
   z-index: 4;
   display: none;
@@ -56,9 +56,10 @@ input#pin {
   height: 100%;
 }
 
-#newPinForm > div:nth-child(1) > img {
-  border-radius: 10px;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+#newPinForm > div:nth-child(1) {
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 #pinLabel {
