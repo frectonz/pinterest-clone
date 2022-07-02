@@ -123,11 +123,13 @@ if (profileId) {
           where("follower", "==", window.currentUserId),
           where("following", "==", window.profileId)
         )
-      ).then(() => {
-        followButton.textContent = "Followed";
-        followButton.disabled = true;
-        followButton.classList.remove("btn-primary");
-        followButton.classList.add("btn-secondary");
+      ).then((querySnapshot) => {
+        querySnapshot.forEach(() => {
+          followButton.textContent = "Followed";
+          followButton.disabled = true;
+          followButton.classList.remove("btn-primary");
+          followButton.classList.add("btn-secondary");
+        });
       });
     }
   });
