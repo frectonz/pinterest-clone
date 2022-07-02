@@ -20,7 +20,9 @@ import setupPinMenus from "./pinMenus.js";
 const pinHTML = (id, saved) => `
   <button class="save btn ${
     saved ? "btn-secondary" : "btn-primary"
-  }" id="savePinButton" data-pin="${id}">${saved ? "Saved" : "Save"}</button>
+  }" id="savePinButton-${id}" data-pin="${id}">${
+  saved ? "Saved" : "Save"
+}</button>
   <div class="dropdown">
     <button class="btn btn-secondary pin-menu">
       <svg width="16" height="16" viewBox="0 0 24 24">
@@ -74,7 +76,7 @@ export default async function setupPinGrid(option = {}) {
 
     pinGrid.appendChild(div);
 
-    setupSaveButtons();
+    setupSaveButton(doc.id);
     setupPinMenus();
   };
 
@@ -101,26 +103,24 @@ export default async function setupPinGrid(option = {}) {
   }
 }
 
-function setupSaveButtons() {
-  const savePinButton = document.querySelectorAll("#savePinButton");
-  savePinButton.forEach((button) => {
-    button.addEventListener("click", (e) => {
-      e.stopPropagation();
-      button.textContent = "Saving..";
-      const pinId = e.target.dataset.pin;
-      const db = getFirestore();
-      const auth = getAuth();
-      addDoc(collection(db, "stars"), {
-        pin: pinId,
-        user: auth.currentUser.uid,
+function setupSaveButton(id) {
+  const savePinButton = document.querySelector(`#savePinButton-${id}`);
+  savePinButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    savePinButton.textContent = "Saving..";
+    const pinId = e.target.dataset.pin;
+    const db = getFirestore();
+    const auth = getAuth();
+    addDoc(collection(db, "stars"), {
+      pin: pinId,
+      user: auth.currentUser.uid,
+    })
+      .then(() => {
+        savePinButton.textContent = "Saved";
+        savePinButton.disabled = true;
+        savePinButton.classList.remove("btn-primary");
+        savePinButton.classList.add("btn-secondary");
       })
-        .then(() => {
-          button.textContent = "Saved";
-          button.disabled = true;
-          button.classList.remove("btn-primary");
-          button.classList.add("btn-secondary");
-        })
-        .catch(() => (button.textContent = "Save"));
-    });
+      .catch(() => (savePinButton.textContent = "Save"));
   });
 }
