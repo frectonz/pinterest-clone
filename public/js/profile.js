@@ -275,6 +275,31 @@ editProfileForm.addEventListener("submit", async (e) => {
         const storageRef = ref(storage, `images/${uuid()}-${data.avatar.name}`);
         const snapshot = await uploadString(storageRef, base64, "data_url");
         data.avatarURl = snapshot.metadata.fullPath;
+
+        const db = getFirestore();
+        const q = query(
+          collection(db, "users"),
+          where("userId", "==", user.uid)
+        );
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (d) => {
+          const obj = {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            username: data.username,
+            bio: data.bio,
+            avatarURL: snapshot.metadata.fullPath,
+          };
+
+          await updateDoc(doc(db, "users", d.id), obj);
+
+          updateUserProfile(user.uid);
+
+          saveButton.textContent = "Saved 🎉";
+          cancelEditProfileButton.textContent = "Close";
+          confetti();
+        });
       } catch (error) {
         saveButton.textContent = "Save";
         editProfileFormError.style.display = "block";
@@ -284,32 +309,28 @@ editProfileForm.addEventListener("submit", async (e) => {
       saveButton.textContent = "Save";
       editProfileFormError.style.display = "block";
     };
+  } else {
+    const db = getFirestore();
+    const q = query(collection(db, "users"), where("userId", "==", user.uid));
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (d) => {
+      const obj = {
+        firstname: data.firstname,
+        lastname: data.lastname,
+        username: data.username,
+        bio: data.bio,
+      };
+
+      await updateDoc(doc(db, "users", d.id), obj);
+
+      updateUserProfile(user.uid);
+
+      saveButton.textContent = "Saved 🎉";
+      cancelEditProfileButton.textContent = "Close";
+      confetti();
+    });
   }
-
-  const db = getFirestore();
-  const q = query(collection(db, "users"), where("userId", "==", user.uid));
-
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach(async (d) => {
-    const obj = {
-      firstname: data.firstname,
-      lastname: data.lastname,
-      username: data.username,
-      bio: data.bio,
-    };
-
-    if (data.avatarURL) {
-      obj.avatarURL = data.avatarURL;
-    }
-
-    await updateDoc(doc(db, "users", d.id), obj);
-
-    updateUserProfile(user.uid);
-
-    saveButton.textContent = "Saved 🎉";
-    cancelEditProfileButton.textContent = "Close";
-    confetti();
-  });
 });
 
 avatarImageInput.addEventListener("change", () => {
