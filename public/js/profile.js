@@ -13,6 +13,7 @@ import {
   query,
   where,
   getDoc,
+  addDoc,
   getDocs,
   updateDoc,
   collection,
