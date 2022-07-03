@@ -146,8 +146,7 @@ function setupFollowStatus(id) {
   let followerCount = 0;
   getDocs(query(collection(db, "follows"), where("following", "==", id)))
     .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        console.log(doc);
+      snapshot.forEach(() => {
         followerCount += 1;
       });
     })
@@ -188,7 +187,7 @@ function updateAvatar(a) {
         avatarImageFull.style.backgroundImage = `url(${url})`;
       }
     })
-    .catch((err) => console.log({ ...err }));
+    .catch((err) => console.error(err));
 }
 
 function updateBio(b) {
@@ -244,7 +243,6 @@ onAuthStateChanged(auth, async (user) => {
   window.currentUserId = user.uid;
   window.dispatchEvent(new Event("creatorIdChanged"));
   if (!profileId) {
-    console.log("nothing");
     setupFollowStatus(user.uid);
   }
 
@@ -285,7 +283,7 @@ onAuthStateChanged(auth, async (user) => {
           .then((url) => {
             avatarImageFull.style.backgroundImage = `url(${url})`;
           })
-          .catch((err) => console.log({ ...err }));
+          .catch((err) => console.error(err));
       }
 
       setupPinGrid({

@@ -75,7 +75,7 @@ function updateAvatar(a) {
     .then((url) => {
       avatarImage.src = url;
     })
-    .catch((err) => console.log({ ...err }));
+    .catch((err) => console.error(err));
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -96,7 +96,7 @@ onAuthStateChanged(auth, async (user) => {
       }
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -173,7 +173,7 @@ newPinForm.addEventListener("submit", async (e) => {
       confetti();
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     saveNewPinForm.textContent = "Save";
   }
 });

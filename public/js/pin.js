@@ -174,7 +174,7 @@ function updateAvatar(a) {
       avatarImage.src = url;
       commentAvatarImg.style.backgroundImage = `url(${url})`;
     })
-    .catch((err) => console.log({ ...err }));
+    .catch((err) => console.error(err));
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -197,7 +197,7 @@ onAuthStateChanged(auth, async (user) => {
       }
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 
   if (pinId) {

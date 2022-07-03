@@ -68,7 +68,7 @@ export default async function setupPinGrid(option = {}) {
       .then((url) => {
         div.style.backgroundImage = `url(${url})`;
       })
-      .catch((err) => console.log({ ...err }));
+      .catch((err) => console.error(err));
 
     div.addEventListener("click", (e) => {
       location.href = `/pin.html?id=${doc.id}`;
