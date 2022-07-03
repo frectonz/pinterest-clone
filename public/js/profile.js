@@ -448,7 +448,7 @@ createdButton.addEventListener("click", () => {
   pinGrid.innerHTML = "";
   setupPinGrid({
     name: "CREATED",
-    uid: profileId || auth.currentUser.uid,
+    uid: window.profileId || auth.currentUser.uid,
   });
 });
 
@@ -459,6 +459,6 @@ savedButton.addEventListener("click", () => {
   pinGrid.innerHTML = "";
   setupPinGrid({
     name: "SAVED",
-    uid: profileId || auth.currentUser.uid,
+    uid: window.profileId || auth.currentUser.uid,
   });
 });
